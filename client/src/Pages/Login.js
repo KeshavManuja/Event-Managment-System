@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { Button } from "@mui/material";
 import { LoginService } from "../server/LoginService";
+import { useNavigate } from "react-router";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const navigate = useNavigate();
   return (
     <div className="main-box">
       <div className="login-div">
@@ -32,6 +32,7 @@ function Login() {
           variant="contained"
           onClick={() => {
             LoginService({ email, password });
+            navigate('/')
           }}
         >
           Login

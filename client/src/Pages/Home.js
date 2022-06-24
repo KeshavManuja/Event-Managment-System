@@ -11,6 +11,9 @@ import TextField from "@mui/material/TextField";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { EventCard } from "../Components/EventCard";
+import HomeService from "../server/HomeService";
+import Navbar from "../Components/Navbar";
+import { useNavigate } from "react-router";
 
 const categories = [
   "Action",
@@ -29,18 +32,24 @@ export const Home = () => {
   const [mode, setMode] = useState("");
   const [title, setTitle] = useState("");
   const [tag, setTag] = useState("");
+  const [address,setAddress] = useState("");
+
+  function handleSubmit () {
+      const payload = {
+          title,
+        address,
+        category,
+        tags:tag,
+        isVirtual:mode
+    }
+
+    HomeService({payload})
+}
+    
+
   return (
     <>
-      <div className="navbar-div">
-        <div>
-          <Button varient="text">Home</Button>
-          <Button varient="text">Favourites</Button>
-        </div>
-
-        <div>
-          <Button varient="text">Login</Button>
-        </div>
-      </div>
+        <Navbar/>
 
       <div className="filter-div">
         <TextField
@@ -55,6 +64,12 @@ export const Home = () => {
           label="Enter Tag"
           variant="outlined"
         />
+        <TextField
+          onChange={(e) => setAddress(e.target.value)}
+          id="outlined-basic"
+          label="Enter Address"
+          variant="outlined"
+        />
 
         <FormControl>
           <InputLabel id="Categories">Categories</InputLabel>
@@ -65,7 +80,7 @@ export const Home = () => {
             onChange={(e) => setCategory(e.target.value)}
             autoWidth
             placeholder="Hogya"
-            style={{ width: "150px" }}
+            style={{ width: "120px" }}
           >
             {categories.map((item) => (
               <MenuItem value={item}>{item}</MenuItem>
@@ -91,7 +106,7 @@ export const Home = () => {
           <FormControl>
             <InputLabel id="demo-simple-select">Mode</InputLabel>
             <Select
-              style={{ width: "150px" }}
+              style={{ width: "120px" }}
               labelId="demo-simple-select"
               id="demo-simple-select"
               value={mode}
@@ -105,7 +120,7 @@ export const Home = () => {
           </FormControl>
         </div>
 
-        <Button variant="outlined">Submit</Button>
+        <Button variant="outlined" onClick={()=> handleSubmit()}>Submit</Button>
       </div>
 
       <div className="events-div">
@@ -115,9 +130,8 @@ export const Home = () => {
       </div>
 
       <div className="pagination-div">
-            <Button>Previous</Button>
-            <Button>Next</Button>
-
+        <Button>Previous</Button>   
+        <Button>Next</Button>
       </div>
     </>
   );
