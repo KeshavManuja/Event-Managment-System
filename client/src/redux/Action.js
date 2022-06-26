@@ -1,4 +1,5 @@
 import axios from "axios";
+import { toast } from "react-toastify";
 export const SET_EVENTS = "SET_EVENTS";
 export const SET_USER_ROLE = "SET_USER_ROLE";
 export const DELETE_USER_ROLE = "DELETE_USER_ROLE";
@@ -32,8 +33,9 @@ export const createEvent = (payload) => (dispatch) => {
     .post("http://localhost:3001/events",payload)
     .then(({ data }) => {
       dispatch({ type: ADD_EVENT, payload: data });
+      toast.success("Event created successfully")
     })
     .catch((err) => {
-      console.log(err);
+      toast.error(err.message)
     });
 }

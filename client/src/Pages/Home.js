@@ -13,11 +13,10 @@ import TextField from "@mui/material/TextField";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { EventCard } from "../Components/EventCard";
-import HomeService from "../server/HomeService";
 import Navbar from "../Components/Navbar";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createEvent, getEvents } from "../redux/Action";
+import {  getEvents } from "../redux/Action";
 import { useNavigate } from "react-router";
 
 const categories = [
@@ -137,7 +136,7 @@ export const Home = () => {
         {userRole && (
           <Button
             variant="outlined"
-            onClick={() => {}}
+            onClick={() => navigate('/addevent')}
           >
             Add Event
           </Button>

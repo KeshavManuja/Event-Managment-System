@@ -5,6 +5,7 @@ import { Home } from "./Pages/Home";
 import { Route, Routes } from "react-router";
 
 import { Favourites } from "./Pages/Favourites";
+import AddEvent from "./Pages/AddEvent";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/favourites" element={<Favourites />} />
+        <Route path="/addevent" element={<AddEvent/>}/>
       </Routes>
     </div>
   );
