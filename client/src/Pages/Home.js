@@ -2,7 +2,9 @@ import { EventData } from "../DataAPI";
 import React, { useState } from "react";
 import {
   Button,
+  Checkbox,
   FormControl,
+  FormControlLabel,
   InputLabel,
   MenuItem,
   Select,
@@ -13,6 +15,9 @@ import "react-datepicker/dist/react-datepicker.css";
 import { EventCard } from "../Components/EventCard";
 import HomeService from "../server/HomeService";
 import Navbar from "../Components/Navbar";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { createEvent, getEvents } from "../redux/Action";
 import { useNavigate } from "react-router";
 
 const categories = [
@@ -24,32 +29,28 @@ const categories = [
 ];
 
 export const Home = () => {
-  let eventdata = EventData;
-
+  const [isVirtual, setIsVirtual] = useState(false);
   const [category, setCategory] = useState("");
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [mode, setMode] = useState("");
   const [title, setTitle] = useState("");
   const [tag, setTag] = useState("");
-  const [address,setAddress] = useState("");
-
-  function handleSubmit () {
-      const payload = {
-          title,
-        address,
-        category,
-        tags:tag,
-        isVirtual:mode
-    }
-
-    HomeService({payload})
-}
-    
+  const [address, setAddress] = useState("");
+  const dispatch = useDispatch();
+  const { userRole,events } = useSelector((store) => store);
+  console.log("events", events)
+  const navigate = useNavigate();
+  useEffect(() => {
+    dispatch(getEvents());
+  }, []);
+  console.log(title)
+  let eventdata = EventData;
+  
 
   return (
     <>
-        <Navbar/>
+      <Navbar />
 
       <div className="filter-div">
         <TextField
@@ -57,18 +58,21 @@ export const Home = () => {
           id="outlined-basic"
           label="Enter Title"
           variant="outlined"
+          value={title}
         />
         <TextField
           onChange={(e) => setTag(e.target.value)}
           id="outlined-basic"
           label="Enter Tag"
           variant="outlined"
+          value={tag}
         />
         <TextField
           onChange={(e) => setAddress(e.target.value)}
           id="outlined-basic"
           label="Enter Address"
           variant="outlined"
+          value={address}
         />
 
         <FormControl>
@@ -120,8 +124,30 @@ export const Home = () => {
           </FormControl>
         </div>
 
-        <Button variant="outlined" onClick={()=> handleSubmit()}>Submit</Button>
+        <Button
+          variant="text"
+          style={{ color: "dodgerblue" }}
+          onClick={()=>{}}
+        >
+          Submit
+        </Button>
       </div>
+
+      <div>
+        {userRole && (
+          <Button
+            variant="outlined"
+            onClick={() => {}}
+          >
+            Add Event
+          </Button>
+        )}
+        {/* {!addEventToggle && (
+          <i class="fa fa-window-close" aria-hidden="true"></i>
+        )} */}
+      </div>
+      
+      
 
       <div className="events-div">
         {eventdata.map((event) => (
@@ -130,7 +156,7 @@ export const Home = () => {
       </div>
 
       <div className="pagination-div">
-        <Button>Previous</Button>   
+        <Button>Previous</Button>
         <Button>Next</Button>
       </div>
     </>

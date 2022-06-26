@@ -75,3 +75,9 @@
  .pagination-div{
   margin-top: 10px;
  }
+ .add-events-div{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+ }

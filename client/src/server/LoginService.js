@@ -1,6 +1,6 @@
 
+export const LoginService = ( ) => {
+    
 
-export const LoginService = ( {email , password} ) => {
-    console.log(email,password)
    
 }
