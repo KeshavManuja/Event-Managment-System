@@ -4,12 +4,17 @@ export const SET_EVENTS = "SET_EVENTS";
 export const SET_USER_ROLE = "SET_USER_ROLE";
 export const DELETE_USER_ROLE = "DELETE_USER_ROLE";
 export const ADD_EVENT = "ADD_EVENT";
+export const SET_USER_ID = "SET_USER_ID";
+export const SET_CATEGORIES = "SET_CATEGORIES"
+export const SET_FAVOURITES = "SET_FAVOURITES"
+export const SET_TOTAL_COUNT = "SET_TOTAL_COUNT"
 
-export const getEvents = () => (dispatch) => {
+export const getEvents = (path="") => (dispatch) => {
   axios
-    .get("http://localhost:3001/events")
-    .then(({ data }) => {
-      dispatch({ type: SET_EVENTS, payload: data });
+    .get(`http://localhost:3001/events${path}`)
+    .then(({ data}) => {
+      dispatch({ type: SET_EVENTS, payload: data.res });
+      dispatch({ type: SET_TOTAL_COUNT, payload: data.pages})
     })
     .catch((err) => {
       console.log(err);
@@ -20,6 +25,13 @@ export const setUSerRole = (role) => ({
   type: SET_USER_ROLE,
   payload: role,
 });
+
+export const setUserID = (id) =>  (
+  {
+    type: SET_USER_ID,
+    payload:id
+  }
+)
 
 export const deleteUSerRole = () => (
   {
@@ -38,4 +50,15 @@ export const createEvent = (payload) => (dispatch) => {
     .catch((err) => {
       toast.error(err.message)
     });
+}
+
+export const setCategories = () => (dispatch) => {
+  axios
+  .get("http://localhost:3001/events/category")
+  .then(({data}) => {
+    dispatch({ type: SET_CATEGORIES, payload: data });
+  })
+  .catch((err)=> {
+    console.log(err.message)
+  })
 }

@@ -4,8 +4,8 @@ import { Button } from "@mui/material";
 import { useNavigate } from "react-router";
 import axios from "axios";
 import { useCookies } from "react-cookie";
-import { useDispatch } from "react-redux";
-import { setUSerRole } from "../redux/Action";
+import { useDispatch, useSelector } from "react-redux";
+import { setUserID, setUSerRole } from "../redux/Action";
 import {toast} from "react-toastify";
 function Login() {
   const [email, setEmail] = useState("");
@@ -13,15 +13,18 @@ function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [cookies, setCookie, removeCookie] = useCookies(["token"]);
-
+  const store = useSelector((store)=> store)
+  console.log(store)
   const handleLogin = () => {
     axios
       .post("http://localhost:3001/user/login", { email, password })
       .then(({ data }) => {
+        console.log(data)
         setCookie("token", data.token);
         dispatch(setUSerRole(data.role));
-        console.log(data)
-        toast.success(data.message)
+        // console.log(data.userID)
+        dispatch(setUserID(data.userID));
+        toast.success(data.message);
         navigate("/");
       })
       .catch(() => {

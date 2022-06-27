@@ -1,51 +1,74 @@
-import { EventData } from "../DataAPI";
 import React, { useState } from "react";
 import {
+  Alert,
   Button,
-  Checkbox,
   FormControl,
-  FormControlLabel,
   InputLabel,
   MenuItem,
+  Pagination,
   Select,
 } from "@mui/material";
 import TextField from "@mui/material/TextField";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { EventCard } from "../Components/EventCard";
 import Navbar from "../Components/Navbar";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import {  getEvents } from "../redux/Action";
+import { getEvents, setCategories } from "../redux/Action";
 import { useNavigate } from "react-router";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { queryPath } from "../utils/queryStringGenerator";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { DesktopDatePicker } from "@mui/x-date-pickers";
 
-const categories = [
-  "Action",
-  "Sci-fi",
-  "History",
-  "International",
-  "Music-festival",
-];
 
 export const Home = () => {
   const [isVirtual, setIsVirtual] = useState(false);
   const [category, setCategory] = useState("");
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
-  const [mode, setMode] = useState("");
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
   const [title, setTitle] = useState("");
+  const [page,setPage] = useState(1);
   const [tag, setTag] = useState("");
   const [address, setAddress] = useState("");
   const dispatch = useDispatch();
-  const { userRole,events } = useSelector((store) => store);
-  console.log("events", events)
+  const { userRole } = useSelector((store) => store);
   const navigate = useNavigate();
+  const eventdata = useSelector((store) => store.events);
+  const totalpages = useSelector((store)=> store.totalCount)
+  const categories = useSelector((store) => store.categories);
+  console.log(page);
   useEffect(() => {
-    dispatch(getEvents());
-  }, []);
-  console.log(title)
-  let eventdata = EventData;
-  
+    dispatch(getEvents(`?page=${page}`));
+    dispatch(setCategories());
+  }, [page]);
+
+  function handleFilters() {
+    const payload = {
+      title,
+      address,
+      category,
+      tags: tag,
+      virtual: isVirtual,
+      startDate: startDate,
+      endDate: endDate,
+      page
+    };
+
+    const path = queryPath(payload);
+    dispatch(getEvents(`?${path}`));
+  }
+
+  function clearFeilds() {
+    setIsVirtual(false);
+    setTitle("");
+    setAddress("");
+    setCategory("");
+    setStartDate();
+    setEndDate();
+    setTag("");
+    dispatch(getEvents())
+  }
 
   return (
     <>
@@ -90,63 +113,77 @@ export const Home = () => {
             ))}
           </Select>
         </FormControl>
-        <div>
-          <span>From: </span>
-          <DatePicker
-            selected={startDate}
-            onChange={(date) => setStartDate(date)}
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <DesktopDatePicker
+            label="Start-Date"
+            inputFormat="dd/MM/yyyy"
+            value={startDate}
+            onChange={(nd) => {
+              
+              setStartDate(new Date(nd).toISOString());
+            }}
+            renderInput={(params) => <TextField {...params} />}
           />
-        </div>
-        <div>
-          <span>To: </span>
-          <DatePicker
-            selected={endDate}
-            onChange={(date) => setEndDate(date)}
+          <DesktopDatePicker
+            label="End-Date"
+            value={endDate}
+            inputFormat="dd/MM/yyyy"
+            onChange={(nd) => {
+              setEndDate(new Date(nd).toISOString());
+            }}
+            renderInput={(params) => <TextField {...params} />}
           />
-        </div>
-
+        </LocalizationProvider>
         <div>
           <FormControl>
             <InputLabel id="demo-simple-select">Mode</InputLabel>
             <Select
-              style={{ width: "120px" }}
+              style={{ width: "100px" }}
               labelId="demo-simple-select"
               id="demo-simple-select"
-              value={mode}
+              value={isVirtual ? "Virtual" : "Live"}
               autoWidth
-              placeholder="Hogya"
-              onChange={(e) => setMode(e.target.value)}
+              onChange={(e) =>
+                e.target.value == "Virtual"
+                  ? setIsVirtual(true)
+                  : setIsVirtual(false)
+              }
             >
               <MenuItem value="Live">Live</MenuItem>
               <MenuItem value="Virtual">Virtual</MenuItem>
             </Select>
           </FormControl>
         </div>
-
+      </div>
+      <div style={{ marginBottom: "20px", padding: "10px" }}>
         <Button
-          variant="text"
-          style={{ color: "dodgerblue" }}
-          onClick={()=>{}}
+          variant="outlined"
+          style={{marginRight:"10px" }}
+          onClick={handleFilters}
         >
           Submit
         </Button>
+
+        <Button
+          variant="outlined"
+          onClick={clearFeilds}
+        >
+          Clear
+        </Button>
       </div>
+      {eventdata.length === 0 && (
+        <Alert severity="warning">
+          This is a warning alert — check it out!
+        </Alert>
+      )}
 
       <div>
         {userRole && (
-          <Button
-            variant="outlined"
-            onClick={() => navigate('/addevent')}
-          >
+          <Button variant="outlined" onClick={() => navigate("/addevent")}>
             Add Event
           </Button>
         )}
-        {/* {!addEventToggle && (
-          <i class="fa fa-window-close" aria-hidden="true"></i>
-        )} */}
       </div>
-      
-      
 
       <div className="events-div">
         {eventdata.map((event) => (
@@ -155,8 +192,8 @@ export const Home = () => {
       </div>
 
       <div className="pagination-div">
-        <Button>Previous</Button>
-        <Button>Next</Button>
+
+      <Pagination onChange={(e,curPage)=> setPage(curPage)} count={totalpages} variant="outlined" shape="rounded" />
       </div>
     </>
   );

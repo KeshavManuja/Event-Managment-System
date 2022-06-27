@@ -22,6 +22,9 @@
   flex-direction: column;
   width: 30%;
 }
+.marginR{
+  margin-right: 10px;
+}
  .navbar-div{
     padding: 7px;
     display: flex;
@@ -72,8 +75,15 @@
   justify-content: center;
   align-items: center;
  }
+ 
  .pagination-div{
-  margin-top: 10px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  
  }
  .add-events-div{
   display: flex;
@@ -85,4 +95,11 @@
   width: fit-content;
   margin: auto;
   margin-top: 100px;
+ }
+ .title-div{
+  display: flex;
+  justify-content: space-between;
+  align-items:center;
+  
+
  }

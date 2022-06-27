@@ -1,10 +1,10 @@
 import { Button, Checkbox, FormControlLabel, TextField } from "@mui/material";
 import React, { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { createEvent } from "../redux/Action";
-import DatePicker from "react-datepicker";
 import { useNavigate } from "react-router";
-
+import { DateTimePicker, DesktopDatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 
 function AddEvent() {
   const dispatch = useDispatch();
@@ -15,6 +15,7 @@ function AddEvent() {
   const [title, setTitle] = useState("");
   const [tag, setTag] = useState("");
   const [address, setAddress] = useState("");
+  const userID = useSelector((store) => store.userID)
   const navigate = useNavigate();
 
   function handleEventSubmit() {
@@ -23,15 +24,14 @@ function AddEvent() {
       address,
       category,
       tags: tag,
-      isVirtual,
+      virtual:isVirtual,
       startDate,
       endDate,
+      createdBy: userID
     };
-    console.log(payload);
     dispatch(createEvent(payload));
     navigate('/')
   }
-
   return (
     <div className="add-events-div">
       <i><h3>Add Event</h3></i>
@@ -62,16 +62,24 @@ function AddEvent() {
       />
       <br/>
       <div>
-        <span>From: </span>
-        <DatePicker
-          selected={startDate}
-          onChange={(date) => setStartDate(date)}
-        />
-      </div>
-      <br/>
-      <div>
-        <span>To: </span>
-        <DatePicker selected={endDate} onChange={(date) => setEndDate(date)} />
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+      <DesktopDatePicker
+            label="Start-Date"
+            inputFormat="dd/MM/yyyy"
+            value={startDate}
+            onChange={(nd) => setStartDate(nd)}
+            renderInput={(params) => <TextField {...params} />}
+          />
+          <br/>
+          <br/>
+          <DesktopDatePicker
+            label="End-Date"
+            inputFormat="dd/MM/yyyy"
+            value={endDate}
+            onChange={(nd) => setEndDate(nd)}
+            renderInput={(params) => <TextField {...params} />}
+          />
+        </LocalizationProvider>
       </div>
 
       <div style={{ marginTop: "20px" }}>
