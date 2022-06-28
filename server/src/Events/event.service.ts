@@ -4,9 +4,9 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Event, EventDocument } from './event.schema';
 import { eventDto } from './events.dto';
 
-export interface responseEvents{
-  res:Event[]
-  pages:number
+export interface responseEvents {
+  res: Event[];
+  pages: number;
 }
 
 @Injectable()
@@ -14,21 +14,25 @@ export class EventService {
   constructor(@InjectModel(Event.name) private event: Model<EventDocument>) {}
 
   async createEvent(body: eventDto): Promise<Event> {
-    const newEvent = new this.event(body);
+    const newEvent = await new this.event(body);
     return newEvent.save();
   }
 
   async getEvents(p): Promise<responseEvents> {
     // console.log(p)
     for (let key in p) {
-      if (key !== 'virtual' && key !== 'startDate' && key !== 'endDate' && key !== 'page')
+      if (
+        key !== 'virtual' &&
+        key !== 'startDate' &&
+        key !== 'endDate' &&
+        key !== 'page'
+      )
         p[key] = new RegExp(p[key], 'i');
     }
 
-    const { startDate, endDate,page, ...query } = p;
-    console.log(page)
+    const { startDate, endDate, page, ...query } = p;
     let temp = [{}];
-    const limit =2;
+    const limit = 2;
     if (startDate && endDate && startDate !== 'null' && endDate !== 'null') {
       temp = [
         {
@@ -45,7 +49,7 @@ export class EventService {
       temp = [{ startDate: { $lte: endDate } }, { endDate: { $lte: endDate } }];
     }
 
-    let skip = (page-1)*limit;
+    let skip = (page - 1) * limit;
 
     let res = await this.event
       .find({ $or: temp, ...query })
@@ -54,7 +58,7 @@ export class EventService {
       .lean()
       .exec();
     let count = await this.event.countDocuments({ $or: temp, ...query });
-    return {res, pages:Math.ceil(count/2)};
+    return { res, pages: Math.ceil(count / 2) };
   }
 
   async setCategories(): Promise<Event[]> {
@@ -63,6 +67,7 @@ export class EventService {
   }
 
   async deleteEvents(id: string): Promise<Event> {
-    return this.event.findByIdAndDelete(id);
+    let response = await this.event.findByIdAndDelete(id);
+    return response;
   }
 }

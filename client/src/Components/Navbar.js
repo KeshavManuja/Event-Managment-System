@@ -24,9 +24,9 @@ function Navbar() {
         <Link className="nav-buttons" to="/">
           Home
         </Link>
-        <Link className="nav-buttons" to="/favourites">
+        {userRole && <Link className="nav-buttons" to="/favourites">
           Favourites
-        </Link>
+        </Link>}
       </div>
 
       <div>

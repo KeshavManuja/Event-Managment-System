@@ -16,7 +16,6 @@ export class UserService {
 
   async login(userCred: any): Promise<any> {
     const user = await this.User.findOne({ email: userCred.email });
-    console.log(user);
     if (!user) {
       throw new HttpException(
         'Email & Password combination not found',
@@ -32,12 +31,22 @@ export class UserService {
     }
 
     const token = JWT.sign({ id: user.id }, process.env.JSONSecret);
-
-    return { message: 'Login successful', token, role: user.role, userID:user._id };
+    return { message: 'Login successful', token, role: user.role, userID:user._id, userFav:user.favourites };
   }
 
-  async getUserID(token:string) {
-    var decoded = JWT.decode(token);
-    console.log(decoded)
+
+
+  async addFavourites(body: any) {
+    let user = await this.User.findById(body.userID);
+    user.favourites.push(body.eventID);
+    return user.save();
+  }
+
+  async removeFavourites(body:any) {
+    let user = await this.User.findById(body.userID);
+    let index = user.favourites.indexOf(body.eventID);
+    user.favourites.splice(index,1);
+    console.log(user)
+    return user.save();
   }
 }

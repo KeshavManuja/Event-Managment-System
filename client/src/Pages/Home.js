@@ -14,7 +14,7 @@ import { EventCard } from "../Components/EventCard";
 import Navbar from "../Components/Navbar";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getEvents, setCategories } from "../redux/Action";
+import { getEvents, setCategories, setFavourites } from "../redux/Action";
 import { useNavigate } from "react-router";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { queryPath } from "../utils/queryStringGenerator";
@@ -37,7 +37,7 @@ export const Home = () => {
   const eventdata = useSelector((store) => store.events);
   const totalpages = useSelector((store)=> store.totalCount)
   const categories = useSelector((store) => store.categories);
-  console.log(page);
+
   useEffect(() => {
     dispatch(getEvents(`?page=${page}`));
     dispatch(setCategories());
@@ -69,7 +69,6 @@ export const Home = () => {
     setTag("");
     dispatch(getEvents())
   }
-
   return (
     <>
       <Navbar />
@@ -109,7 +108,7 @@ export const Home = () => {
             style={{ width: "120px" }}
           >
             {categories.map((item) => (
-              <MenuItem value={item}>{item}</MenuItem>
+              <MenuItem key={item._id} value={item}>{item}</MenuItem>
             ))}
           </Select>
         </FormControl>
@@ -187,7 +186,7 @@ export const Home = () => {
 
       <div className="events-div">
         {eventdata.map((event) => (
-          <EventCard key={event.id} item={event} />
+          <EventCard key={event._id} item={event} />
         ))}
       </div>
 
