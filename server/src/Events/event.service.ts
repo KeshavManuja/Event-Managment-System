@@ -19,7 +19,13 @@ export class EventService {
   }
 
   async getEvents(p): Promise<responseEvents> {
-    // console.log(p)
+    console.log(p)
+    let key=Object.keys(p)
+    if(key.length==0) {
+      let pages=1;
+      let res = await this.event.find({});
+      return {res,pages}
+    }
     for (let key in p) {
       if (
         key !== 'virtual' &&
@@ -32,8 +38,8 @@ export class EventService {
 
     const { startDate, endDate, page, ...query } = p;
     let temp = [{}];
-    const limit = 2;
-    if (startDate && endDate && startDate !== 'null' && endDate !== 'null') {
+    const limit = 4;
+    if (startDate && endDate && endDate>=startDate) {
       temp = [
         {
           startDate: { $gte: startDate, $lte: endDate },
@@ -54,11 +60,11 @@ export class EventService {
     let res = await this.event
       .find({ $or: temp, ...query })
       .skip(skip)
-      .limit(2)
+      .limit(limit)
       .lean()
       .exec();
     let count = await this.event.countDocuments({ $or: temp, ...query });
-    return { res, pages: Math.ceil(count / 2) };
+    return { res, pages: Math.ceil(count / limit) };
   }
 
   async setCategories(): Promise<Event[]> {
@@ -70,4 +76,6 @@ export class EventService {
     let response = await this.event.findByIdAndDelete(id);
     return response;
   }
+
+  
 }

@@ -10,16 +10,16 @@ import {
 } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import "react-datepicker/dist/react-datepicker.css";
-import { EventCard } from "../Components/EventCard";
-import Navbar from "../Components/Navbar";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getEvents, setCategories, setFavourites } from "../redux/Action";
+import { getAllEvents, getEvents, setCategories, setFavourites } from "../redux/Action";
 import { useNavigate } from "react-router";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { queryPath } from "../utils/queryStringGenerator";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { DesktopDatePicker } from "@mui/x-date-pickers";
+import { EventCard } from "../Components/EventCard";
+import Navbar from "../Components/Navbar";
+import { queryPath } from "../utils/queryStringGenerator";
 
 
 export const Home = () => {
@@ -31,14 +31,15 @@ export const Home = () => {
   const [page,setPage] = useState(1);
   const [tag, setTag] = useState("");
   const [address, setAddress] = useState("");
-  const dispatch = useDispatch();
-  const { userRole } = useSelector((store) => store);
-  const navigate = useNavigate();
   const eventdata = useSelector((store) => store.events);
+  const { userRole } = useSelector((store) => store);
   const totalpages = useSelector((store)=> store.totalCount)
   const categories = useSelector((store) => store.categories);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
+    dispatch(getAllEvents());
     dispatch(getEvents(`?page=${page}`));
     dispatch(setCategories());
   }, [page]);
@@ -172,12 +173,12 @@ export const Home = () => {
       </div>
       {eventdata.length === 0 && (
         <Alert severity="warning">
-          This is a warning alert — check it out!
+          There are no events
         </Alert>
       )}
 
       <div>
-        {userRole && (
+        {userRole==="manager" && (
           <Button variant="outlined" onClick={() => navigate("/addevent")}>
             Add Event
           </Button>

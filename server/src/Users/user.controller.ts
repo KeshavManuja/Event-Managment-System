@@ -1,27 +1,46 @@
-import { Body, Controller, Get, Patch, Post, Put } from '@nestjs/common';
+import { Body, Controller,  Post } from '@nestjs/common';
 import { UserService } from './user.service';
 
+interface loginInterface {
+  email:String,
+  password:String
+}
+
+interface signupInterface {
+  name:String,
+  email:String,
+  password:String,
+  role:String,
+  favourites:String[], 
+}
+
+interface modifyFavourites {
+  userID:String,
+  eventID:String
+}
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+
   @Post()
-  createUser(@Body() body: any): any {
+  createUser(@Body() body: signupInterface): any {
     return this.userService.createUser(body);
   }
 
   @Post('login')
-  login(@Body() body: any): any {
+  login(@Body() body: loginInterface): any {
+    console.log(body)
     return this.userService.login(body);
   }
 
   @Post('favourites/add')
-  addFavourites(@Body() body: any): any {
+  addFavourites(@Body() body: modifyFavourites): any {
     return this.userService.addFavourites(body);
   }
 
   @Post('favourites/remove')
-  removeFavourites(@Body() body:any):any {
+  removeFavourites(@Body() body:modifyFavourites):any {
     return this.userService.removeFavourites(body);
   }
 }

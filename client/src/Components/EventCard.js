@@ -7,27 +7,29 @@ import DeleteOutlineSharpIcon from "@mui/icons-material/DeleteOutlineSharp";
 import { red } from "@material-ui/core/colors";
 import { addFavourites, eventDelete, removeFavourite } from "../redux/Action";
 import { toast } from "react-toastify";
+import { useCookies } from "react-cookie";
 
-const label = { inputProps: { "aria-label": "Checkbox demo" } };
 export const EventCard = ({ item }) => {
+  const [cookie,setCookie,removeCookie]= useCookies(["token"])
+  const dispatch = useDispatch();
   const { userRole } = useSelector((store) => store);
   var { userID } = useSelector((store) => store);
   const { userFav } = useSelector((store) => store);
-  const dispatch = useDispatch();
+  const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
   const handleFavourites = (eventID) => {
     const payload = { userID, eventID };
     if (userFav.includes(eventID)) {
-      dispatch(removeFavourite(payload));
+      dispatch(removeFavourite(payload,cookie.token));
     } 
     else {
-      dispatch(addFavourites(payload));
+      dispatch(addFavourites(payload,cookie.token));
     }
   };
 
   const handleEventDelete = (createdBy, eventID) => {
     if (userID === createdBy) {
-      dispatch(eventDelete(eventID));
+      dispatch(eventDelete(eventID,cookie.token));
     } else {
       toast.error("You are not authorised to delete this event");
     }
@@ -56,8 +58,9 @@ export const EventCard = ({ item }) => {
       <p>City : {item.address}</p>
       <p>Mode: {item.virtual ? "Virtual" : "Live"}</p>
       <p>Category: {item.category}</p>
-      <p>Dated: {item.startDate} </p>
-      <p>EndDate: {item.endDate}</p>
+      <p>StartDate: {item.startDate.split("T")[0]} </p>
+      <p>EndDate: {item.endDate.split("T")[0]}</p>
+      <p style={{padding:"5px"}}><i>{item.description}</i></p>
       <div style={{ display: "flex" }}>
         <span>Tags: </span>
         {item.tags[0].split(" ").map((tag, index) => {

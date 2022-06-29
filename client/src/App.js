@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import { useCookies } from "react-cookie";
+
 import { Route, Routes } from "react-router";
 
 import "./App.css";

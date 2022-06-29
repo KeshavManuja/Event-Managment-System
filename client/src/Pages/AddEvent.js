@@ -5,6 +5,7 @@ import { createEvent } from "../redux/Action";
 import { useNavigate } from "react-router";
 import { DateTimePicker, DesktopDatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { useCookies } from "react-cookie";
 
 function AddEvent() {
   const dispatch = useDispatch();
@@ -14,23 +15,25 @@ function AddEvent() {
   const [endDate, setEndDate] = useState(new Date());
   const [title, setTitle] = useState("");
   const [tag, setTag] = useState("");
+  const [description,setDescription] = useState("")
   const [address, setAddress] = useState("");
   const userID = useSelector((store) => store.userID)
+  const [cookie,setCookie,removeCookie] = useCookies(["token"])
   const navigate = useNavigate();
-
   function handleEventSubmit() {
     const payload = {
       title,
       address,
       category,
+      description,
       tags: tag,
       virtual:isVirtual,
       startDate,
       endDate,
       createdBy: userID
     };
-    dispatch(createEvent(payload));
-    navigate('/')
+    dispatch(createEvent({payload,token:cookie.token}));
+    // navigate('/')
   }
   return (
     <div className="add-events-div">
@@ -53,6 +56,12 @@ function AddEvent() {
         label="Enter Tags"
         variant="standard"
         onChange={(e) => setTag(e.target.value)}
+      />
+            <TextField
+        id="standard-basic"
+        label="Enter Description"
+        variant="standard"
+        onChange={(e) => setDescription(e.target.value)}
       />
       <TextField
         id="standard-basic"

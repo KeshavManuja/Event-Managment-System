@@ -12,98 +12,120 @@ export const ADD_FAVOURITES = "ADD_FAVOURITES";
 export const IS_LOGGED_IN = "IS_LOGGED_IN";
 export const EVENT_DELETE = "EVENT_DELETE";
 export const REMOVE_FAVOURITE = "REMOVE_FAVOURITE";
+export const GET_ALL_EVENTS = "GET_ALL_EVENTS";
 
-export const getEvents = (path="") => (dispatch) => {
-  axios
-    .get(`http://localhost:3001/events${path}`)
-    .then(({ data}) => {
-      dispatch({ type: SET_EVENTS, payload: data.res });
-      dispatch({ type: SET_TOTAL_COUNT, payload: data.pages})
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-};
+
+
+export const getEvents = (path = "") => (dispatch) => {
+    axios
+      .get(`http://localhost:3001/events${path}`)
+      .then(({ data }) => {
+        dispatch({ type: SET_EVENTS, payload: data.res });
+        dispatch({ type: SET_TOTAL_COUNT, payload: data.pages });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
 export const setFavourites = (data) => ({
-  type:SET_FAVOURITES,
-  payload:data
-})
+  type: SET_FAVOURITES,
+  payload: data,
+});
 
 export const isLoggedIn = () => ({
-  type:IS_LOGGED_IN,
-
-})
+  type: IS_LOGGED_IN,
+});
 
 export const setUSerRole = (role) => ({
   type: SET_USER_ROLE,
   payload: role,
 });
 
-export const setUserID = (id) =>  (
-  {
-    type: SET_USER_ID,
-    payload:id
-  }
-)
+export const setUserID = (id) => ({
+  type: SET_USER_ID,
+  payload: id,
+});
 
+export const deleteUSerRole = () => ({
+  type: DELETE_USER_ROLE,
+  payload: null,
+});
 
-export const deleteUSerRole = () => (
-  {
-    type:DELETE_USER_ROLE,
-    payload:null
-  }
-)
-
-export const createEvent = (payload) => (dispatch) => {
+export const createEvent = ({payload,token}) => (dispatch) => {
+  console.log(token)
   axios
-    .post("http://localhost:3001/events",payload)
+    .post("http://localhost:3001/events", payload, {
+      headers: { jwt: token },
+    })
     .then(({ data }) => {
       dispatch({ type: ADD_EVENT, payload: data });
-      toast.success("Event created successfully")
+      toast.success("Event created successfully");
     })
     .catch((err) => {
-      toast.error(err.message)
+      toast.error(err.message);
     });
-}
+};
 
 export const setCategories = () => (dispatch) => {
   axios
-  .get("http://localhost:3001/events/category")
-  .then(({data}) => {
-    dispatch({ type: SET_CATEGORIES, payload: data });
-  })
-  .catch((err)=> {
-    console.log(err.message)
-  })
-}
-
-export const addFavourites = (payload) => (dispatch) => {
-  axios.post("http://localhost:3001/user/favourites/add",payload)
-  .then(({data})=> {
-    dispatch({type:SET_FAVOURITES, payload:data.favourites})
-    toast.success('Event added successfully!')  
-  })
-  .catch((err)=> {
-    toast.error(err.message)
-    console.log(err)
-  })
-}
-
-export const eventDelete = (payload) => (dispatch) => {
-  axios.delete(`http://localhost:3001/events/${payload}`)
-    .then(()=> toast.success("Event Deleted Successfully"))
-    .catch((err)=> toast.error(err.message))
-}
-
-export const removeFavourite = (payload) => (dispatch) => {
-
-  axios.post("http://localhost:3001/user/favourites/remove",payload)
-    .then(({data}) => {
-      dispatch({type:SET_FAVOURITES, payload:data.favourites})
-      toast.success("Removed from favourites successfully!")
+    .get("http://localhost:3001/events/category", {
     })
-    .catch((err)=> {
-      toast.error(err.message)
-
+    .then(({ data }) => {
+      dispatch({ type: SET_CATEGORIES, payload: data });
     })
-}
+    .catch((err) => {
+      console.log(err.message);
+    });
+};
+
+export const addFavourites = (payload,token) => (dispatch) => {
+  axios
+    .post("http://localhost:3001/user/favourites/add", payload, {
+      headers: { jwt: token },
+    })
+    .then(({ data }) => {
+      dispatch({ type: SET_FAVOURITES, payload: data.favourites });
+      toast.success("Event added successfully!");
+    })
+    .catch((err) => {
+      toast.error(err.message);
+      console.log(err);
+    });
+};
+
+export const eventDelete = (payload,token) => (dispatch) => {
+  axios
+    .delete(`http://localhost:3001/events/${payload}`, {
+      headers: { jwt: token },
+    })
+    .then(() => toast.success("Event Deleted Successfully"))
+    .catch((err) => toast.error(err.message));
+};
+
+export const removeFavourite = (payload,token) => (dispatch) => {
+  axios
+    .post("http://localhost:3001/user/favourites/remove", payload, {
+      headers: { jwt: token },
+    })
+    .then(({ data }) => {
+      dispatch({ type: SET_FAVOURITES, payload: data.favourites });
+      toast.success("Removed from favourites successfully!");
+    })
+    .catch((err) => {
+      toast.error(err.message);
+    });
+};
+
+export const getAllEvents = () => (dispatch) => {
+  axios
+    .get("http://localhost:3001/events", {
+    })
+    .then(({ data }) => {
+      console.log(data);
+      dispatch({ type: GET_ALL_EVENTS, payload: data.res });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+};

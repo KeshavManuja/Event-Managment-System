@@ -13,6 +13,11 @@ export class UserService {
     const newUser = new this.User(body);
     return newUser.save();
   }
+  async  getUser(id:string): Promise<User> {
+    const user = await this.User.findOne({ _id:id });
+    return user;
+    } 
+  
 
   async login(userCred: any): Promise<any> {
     const user = await this.User.findOne({ email: userCred.email });
@@ -34,7 +39,7 @@ export class UserService {
     return { message: 'Login successful', token, role: user.role, userID:user._id, userFav:user.favourites };
   }
 
-
+ 
 
   async addFavourites(body: any) {
     let user = await this.User.findById(body.userID);
@@ -46,7 +51,6 @@ export class UserService {
     let user = await this.User.findById(body.userID);
     let index = user.favourites.indexOf(body.eventID);
     user.favourites.splice(index,1);
-    console.log(user)
     return user.save();
   }
 }

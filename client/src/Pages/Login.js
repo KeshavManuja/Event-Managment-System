@@ -6,17 +6,19 @@ import axios from "axios";
 import { useDispatch} from "react-redux";
 import {  setFavourites, setUserID, setUSerRole } from "../redux/Action";
 import {toast} from "react-toastify";
+import { useCookies } from "react-cookie";
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  
+  const [cookies, setCookie, removeCookie] = useCookies(['token']);
   const handleLogin = () => {
     axios
       .post("http://localhost:3001/user/login", { email, password })
       .then(({ data }) => {
+        setCookie("token",data.token)
         dispatch(setUSerRole(data.role));
         dispatch(setUserID(data.userID));
         dispatch(setFavourites(data.userFav));
