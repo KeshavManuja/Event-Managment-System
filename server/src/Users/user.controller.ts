@@ -30,7 +30,6 @@ export class UserController {
 
   @Post('login')
   login(@Body() body: loginInterface): any {
-    console.log(body)
     return this.userService.login(body);
   }
 

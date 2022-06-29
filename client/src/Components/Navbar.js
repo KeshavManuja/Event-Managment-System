@@ -13,10 +13,11 @@ function Navbar() {
   function handleLogStatus() {
     if (userRole) {
       removeCookie("token");
+      removeCookie("userRole");
       dispatch(deleteUSerRole());
       toast.success("Logged out successfully!");
     }
-    navigate("/login");
+      navigate('/login')
   }
   return (
     <div className="navbar-div">

@@ -53,7 +53,7 @@ export const deleteUSerRole = () => ({
 });
 
 export const createEvent = ({payload,token}) => (dispatch) => {
-  console.log(token)
+ 
   axios
     .post("http://localhost:3001/events", payload, {
       headers: { jwt: token },
@@ -90,7 +90,6 @@ export const addFavourites = (payload,token) => (dispatch) => {
     })
     .catch((err) => {
       toast.error(err.message);
-      console.log(err);
     });
 };
 
@@ -122,7 +121,6 @@ export const getAllEvents = () => (dispatch) => {
     .get("http://localhost:3001/events", {
     })
     .then(({ data }) => {
-      console.log(data);
       dispatch({ type: GET_ALL_EVENTS, payload: data.res });
     })
     .catch((err) => {

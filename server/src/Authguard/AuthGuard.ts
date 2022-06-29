@@ -22,11 +22,11 @@ export class AuthGuard implements CanActivate {
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
     const request = context.switchToHttp().getRequest();
-    console.log("cookies at auth: ",request.cookies)
+    // console.log("cookies at auth: ",request.cookies)
 
     try {
       const token = request.headers.jwt;
-      console.log('token', token);
+      // console.log('token', token);
       var decoded = jwt.verify(token.toString(), process.env.JSONSecret);
       // console.log('decoded', decoded);
       const userId = decoded['id'];

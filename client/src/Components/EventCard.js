@@ -13,10 +13,11 @@ export const EventCard = ({ item }) => {
   const [cookie,setCookie,removeCookie]= useCookies(["token"])
   const dispatch = useDispatch();
   const { userRole } = useSelector((store) => store);
-  var { userID } = useSelector((store) => store);
+  const { userID } = useSelector((store) => store);
   const { userFav } = useSelector((store) => store);
-  const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
+  const label = { inputProps: { "aria-label": "Checkbox demo" } };
+  // console.log(userID)
   const handleFavourites = (eventID) => {
     const payload = { userID, eventID };
     if (userFav.includes(eventID)) {

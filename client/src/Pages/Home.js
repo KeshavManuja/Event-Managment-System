@@ -68,6 +68,8 @@ export const Home = () => {
     setStartDate();
     setEndDate();
     setTag("");
+    setStartDate(null);
+    setEndDate(null);
     dispatch(getEvents())
   }
   return (
@@ -108,9 +110,9 @@ export const Home = () => {
             placeholder="Hogya"
             style={{ width: "120px" }}
           >
-            {categories.map((item) => (
-              <MenuItem key={item._id} value={item}>{item}</MenuItem>
-            ))}
+            {categories.map((item,index) => {
+              return <MenuItem key={index} value={item}>{item}</MenuItem>
+          })}
           </Select>
         </FormControl>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
@@ -158,7 +160,7 @@ export const Home = () => {
       <div style={{ marginBottom: "20px", padding: "10px" }}>
         <Button
           variant="outlined"
-          style={{marginRight:"10px" }}
+          style={{marginRight:"10px",color:"green" }}
           onClick={handleFilters}
         >
           Submit
@@ -166,6 +168,7 @@ export const Home = () => {
 
         <Button
           variant="outlined"
+          style={{color:"tomato"}}
           onClick={clearFeilds}
         >
           Clear
@@ -179,7 +182,7 @@ export const Home = () => {
 
       <div>
         {userRole==="manager" && (
-          <Button variant="outlined" onClick={() => navigate("/addevent")}>
+          <Button style={{marginBottom:"10px",color:"dodgerblue"}} variant="outlined" onClick={() => navigate("/addevent")}>
             Add Event
           </Button>
         )}

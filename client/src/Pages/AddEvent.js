@@ -33,7 +33,7 @@ function AddEvent() {
       createdBy: userID
     };
     dispatch(createEvent({payload,token:cookie.token}));
-    // navigate('/')
+    navigate('/')
   }
   return (
     <div className="add-events-div">

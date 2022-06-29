@@ -6,7 +6,6 @@ import { config } from 'dotenv';
 import { UserModule } from './Users/user.module';
 import { EventModule } from './Events/event.module';
 config();
-console.log(process.env.mongoURL)
 @Module({
   imports: [MongooseModule.forRoot(process.env.mongoURL),UserModule,EventModule],
   controllers: [AppController],

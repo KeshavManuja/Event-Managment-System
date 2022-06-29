@@ -19,7 +19,6 @@ export class EventService {
   }
 
   async getEvents(p): Promise<responseEvents> {
-    console.log(p)
     let key=Object.keys(p)
     if(key.length==0) {
       let pages=1;
@@ -38,7 +37,7 @@ export class EventService {
 
     const { startDate, endDate, page, ...query } = p;
     let temp = [{}];
-    const limit = 4;
+    let limit = 4;
     if (startDate && endDate && endDate>=startDate) {
       temp = [
         {
