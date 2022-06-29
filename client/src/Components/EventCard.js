@@ -5,7 +5,7 @@ import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
 import { useDispatch, useSelector } from "react-redux";
 import DeleteOutlineSharpIcon from "@mui/icons-material/DeleteOutlineSharp";
 import { red } from "@material-ui/core/colors";
-import { addFavourites, eventDelete, removeFavourite } from "../redux/Action";
+import { addFavourites, eventDelete, getEvents, removeFavourite } from "../redux/Action";
 import { toast } from "react-toastify";
 import { useCookies } from "react-cookie";
 
@@ -22,6 +22,7 @@ export const EventCard = ({ item }) => {
     const payload = { userID, eventID };
     if (userFav.includes(eventID)) {
       dispatch(removeFavourite(payload,cookie.token));
+      dispatch(getEvents());
     } 
     else {
       dispatch(addFavourites(payload,cookie.token));

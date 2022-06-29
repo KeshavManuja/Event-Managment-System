@@ -13,7 +13,7 @@ export const IS_LOGGED_IN = "IS_LOGGED_IN";
 export const EVENT_DELETE = "EVENT_DELETE";
 export const REMOVE_FAVOURITE = "REMOVE_FAVOURITE";
 export const GET_ALL_EVENTS = "GET_ALL_EVENTS";
-
+export const FETCH_USER = "FETCH_USER"
 
 
 export const getEvents = (path = "") => (dispatch) => {
@@ -27,6 +27,8 @@ export const getEvents = (path = "") => (dispatch) => {
         console.log(err);
       });
   };
+
+
 
 export const setFavourites = (data) => ({
   type: SET_FAVOURITES,

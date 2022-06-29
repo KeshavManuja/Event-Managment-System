@@ -53,4 +53,11 @@ export class UserService {
     user.favourites.splice(index,1);
     return user.save();
   }
+
+  async getUserfromToken({token}) {
+    var decoded = JWT.verify(token,process.env.JSONSecret);
+    const user = await this.User.findOne({_id:decoded.id})
+    console.log(user)
+    return user
+  }    
 }

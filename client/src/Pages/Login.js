@@ -19,12 +19,6 @@ function Login() {
       .post("http://localhost:3001/user/login", { email, password })
       .then(({ data }) => {
         setCookie("token",data.token);
-        setCookie("userRole",data.role);
-        setCookie("userID",data.userID);
-        dispatch(setUSerRole(data.role));
-        dispatch(setUserID(data.userID));
-        dispatch(setFavourites(data.userFav));
-        toast.success(data.message);
         navigate("/");
       })
       .catch(() => {

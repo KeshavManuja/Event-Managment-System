@@ -18,6 +18,10 @@ interface modifyFavourites {
   userID:String,
   eventID:String
 }
+
+interface tokenInterface{
+  token:String
+}
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -41,5 +45,10 @@ export class UserController {
   @Post('favourites/remove')
   removeFavourites(@Body() body:modifyFavourites):any {
     return this.userService.removeFavourites(body);
+  }
+
+  @Post('fetchuser')
+  getUserfromToken(@Body() body:tokenInterface) {
+    return this.userService.getUserfromToken(body)
   }
 }
