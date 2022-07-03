@@ -7,17 +7,17 @@ import { config } from 'dotenv';
 config();
 @Injectable()
 export class UserService {
-  constructor(@InjectModel(User.name) private User: Model<UserDocument>) {}
+  constructor(@InjectModel(User.name) private User: Model<UserDocument>) { }
 
   async createUser(body: any): Promise<User> {
     const newUser = new this.User(body);
     return newUser.save();
   }
-  async  getUser(id:string): Promise<User> {
-    const user = await this.User.findOne({ _id:id });
+  async getUser(id: string): Promise<User> {
+    const user = await this.User.findOne({ _id: id });
     return user;
-    } 
-  
+  }
+
 
   async login(userCred: any): Promise<any> {
     const user = await this.User.findOne({ email: userCred.email });
@@ -36,28 +36,38 @@ export class UserService {
     }
 
     const token = JWT.sign({ id: user.id }, process.env.JSONSecret);
-    return { message: 'Login successful', token, role: user.role, userID:user._id, userFav:user.favourites };
+    return { message: 'Login successful', token, role: user.role, userID: user._id, userFav: user.favourites };
   }
 
- 
+
 
   async addFavourites(body: any) {
+
+    const user = await this.User.findById(body.userID);
+    user.favourites.push(body.favEvent);
+    await user.save();
+    return body.favEvent;
+  }
+
+  async removeFavourites(body: any) {
     let user = await this.User.findById(body.userID);
-    user.favourites.push(body.eventID);
+    user.favourites = user.favourites.filter((favourite) => favourite._id !== body.favEvent._id);
     return user.save();
   }
 
-  async removeFavourites(body:any) {
-    let user = await this.User.findById(body.userID);
-    let index = user.favourites.indexOf(body.eventID);
-    user.favourites.splice(index,1);
-    return user.save();
+  async getFavourites(userID: string, page: string) {
+    const limit = 2;
+    let user = await this.User.findById(userID).lean().exec();
+    const favEvents = user.favourites.slice(Number(page) - 1, limit);
+    return { favEvents, pages: Math.ceil(user.favourites.length / limit) };
+
   }
 
-  async getUserfromToken({token}) {
-    var decoded = JWT.verify(token,process.env.JSONSecret);
-    const user = await this.User.findOne({_id:decoded.id})
-    console.log(user)
+  async getUserfromToken({ token }) {
+    var decoded = JWT.verify(token, process.env.JSONSecret);
+    const user = await this.User.findOne({ _id: decoded.id })
     return user
-  }    
+  }
+
+
 }

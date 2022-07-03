@@ -5,11 +5,11 @@ export type EventDocument = Event & Document;
 
 @Schema()
 export class Event {
-    @Prop()
-    title: string;
+  @Prop()
+  title: string;
 
-  @Prop()  
-    description: string;
+  @Prop()
+  description: string;
 
   @Prop()
   category: string;
@@ -24,10 +24,10 @@ export class Event {
   virtual: boolean;
 
   @Prop()
-  startDate: string;
+  startDate: Date;
 
   @Prop()
-  endDate: string;
+  endDate: Date;
 
   @Prop()
   createdBy: string;

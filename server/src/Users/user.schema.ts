@@ -1,25 +1,26 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { EventDocument } from 'src/Events/event.schema';
 import { Document } from 'mongoose';
 
 export type UserDocument = User & Document;
 
 @Schema()
 export class User {
-    @Prop()
-    name: string;
+  @Prop()
+  name: string;
 
-  @Prop()  
+  @Prop()
   email: string;
 
   @Prop()
   password: string;
 
-  @Prop({default:"regular"})
+  @Prop({ default: "regular" })
   role: string;
 
-  @Prop([String])
-  favourites: string[];
-  
+  @Prop([Object])
+  favourites: EventDocument[];
+
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

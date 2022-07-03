@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Checkbox from "@material-ui/core/Checkbox";
 import Favorite from "@material-ui/icons/Favorite";
 import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
@@ -9,33 +9,39 @@ import { addFavourites, eventDelete, getEvents, removeFavourite } from "../redux
 import { toast } from "react-toastify";
 import { useCookies } from "react-cookie";
 
-export const EventCard = ({ item }) => {
-  const [cookie,setCookie,removeCookie]= useCookies(["token"])
+export const EventCard = ({ item, page }) => {
+  const [cookie, setCookie, removeCookie] = useCookies(["token", "userRole", "userID"])
   const dispatch = useDispatch();
   const { userRole } = useSelector((store) => store);
   const { userID } = useSelector((store) => store);
   const { userFav } = useSelector((store) => store);
-
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
-  // console.log(userID)
-  const handleFavourites = (eventID) => {
-    const payload = { userID, eventID };
-    if (userFav.includes(eventID)) {
-      dispatch(removeFavourite(payload,cookie.token));
-      dispatch(getEvents());
-    } 
-    else {
-      dispatch(addFavourites(payload,cookie.token));
+
+  const handleFavourites = (favEvent) => {
+    const id = favEvent._id;
+    const payload = { userID, favEvent };
+    console.log(payload, userFav.favourites);
+    if (userFav && userFav.find((el) => el._id === favEvent._id)) {
+      dispatch(removeFavourite(favEvent, userID, cookie.token));
+
     }
+    else dispatch(addFavourites(favEvent, userID, cookie.token));
+
   };
 
-  const handleEventDelete = (createdBy, eventID) => {
-    if (userID === createdBy) {
-      dispatch(eventDelete(eventID,cookie.token));
+  const handleEventDelete = (event) => {
+    const id = event._id
+    const payload = { userID, event };
+
+    if (userID === event.createdBy) {
+      dispatch(eventDelete(event._id, page, cookie.token));
+      dispatch(removeFavourite(event, userID, cookie.token));
     } else {
       toast.error("You are not authorised to delete this event");
     }
   };
+
+  const isFav = !!userFav.find((ele) => ele._id === item._id);
 
   return (
     <div className="eventcard-div">
@@ -43,17 +49,17 @@ export const EventCard = ({ item }) => {
         <h2>Title: {item.title}</h2>
         {userRole && (
           <Checkbox
-            defaultChecked={userFav && userFav.includes(item._id) ? true : false}
-            onClick={() => handleFavourites(item._id)}
+            defaultChecked={isFav ? true : false}
+            onClick={() => handleFavourites(item)}
             {...label}
             icon={<FavoriteBorder />}
             checkedIcon={<Favorite />}
           />
         )}
-        {userRole && (
+        {userRole === "manager" && (
           <DeleteOutlineSharpIcon
             sx={{ color: red[500] }}
-            onClick={() => handleEventDelete(item.createdBy, item._id)}
+            onClick={() => handleEventDelete(item)}
           />
         )}
       </div>
@@ -61,9 +67,9 @@ export const EventCard = ({ item }) => {
       <p>Mode: {item.virtual ? "Virtual" : "Live"}</p>
       <p>Category: {item.category}</p>
       <p>StartDate: {item.startDate.split("T")[0]} </p>
-      <p>EndDate: {item.endDate.split("T")[0]}</p>
-      <p style={{padding:"5px"}}><i>{item.description}</i></p>
-      <div style={{ display: "flex" }}>
+      <p>EndDate: {item.endDate && item.endDate.split("T")[0]}</p>
+      <p style={{ padding: "5px" }}><i>{item.description}</i></p>
+      <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
         <span>Tags: </span>
         {item.tags[0].split(" ").map((tag, index) => {
           return (

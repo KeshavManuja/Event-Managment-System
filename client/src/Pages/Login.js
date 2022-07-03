@@ -3,22 +3,25 @@ import TextField from "@mui/material/TextField";
 import { Button } from "@mui/material";
 import { useNavigate } from "react-router";
 import axios from "axios";
-import { useDispatch} from "react-redux";
-import {  setFavourites, setUserID, setUSerRole } from "../redux/Action";
-import {toast} from "react-toastify";
+import { useDispatch } from "react-redux";
+import { setFavourites, setUserID, setUSerRole } from "../redux/Action";
+import { toast } from "react-toastify";
 import { useCookies } from "react-cookie";
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  const [cookies, setCookie, removeCookie] = useCookies(['token']);
+  const [cookies, setCookie, removeCookie] = useCookies(['token', 'userRole', 'userID']);
   const handleLogin = () => {
     axios
       .post("http://localhost:3001/user/login", { email, password })
       .then(({ data }) => {
-        setCookie("token",data.token);
+        console.log('this is user data; ', data);
+        setCookie("token", data.token);
+        setCookie("userRole", data.role);
+        dispatch(setUserID(data.userID));
+        dispatch(setFavourites(data.userFav))
         navigate("/");
       })
       .catch(() => {
@@ -39,6 +42,7 @@ function Login() {
         />
         <br />
         <TextField
+          type="password"
           id="outlined-basic"
           label="Enter Password"
           variant="outlined"

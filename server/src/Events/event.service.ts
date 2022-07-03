@@ -1,5 +1,5 @@
 import { Model } from 'mongoose';
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Event, EventDocument } from './event.schema';
 import { eventDto } from './events.dto';
@@ -11,19 +11,28 @@ export interface responseEvents {
 
 @Injectable()
 export class EventService {
-  constructor(@InjectModel(Event.name) private event: Model<EventDocument>) {}
+  constructor(@InjectModel(Event.name) private event: Model<EventDocument>) { }
 
   async createEvent(body: eventDto): Promise<Event> {
-    const newEvent = await new this.event(body);
-    return newEvent.save();
+    try {
+
+      const newEvent = await new this.event(body);
+      return newEvent.save();
+    }
+    catch (err) {
+      throw new HttpException(
+        err.message,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
   }
 
   async getEvents(p): Promise<responseEvents> {
-    let key=Object.keys(p)
-    if(key.length==0) {
-      let pages=1;
+    let key = Object.keys(p)
+    if (key.length == 0) {
+      let pages = 1;
       let res = await this.event.find({});
-      return {res,pages}
+      return { res, pages }
     }
     for (let key in p) {
       if (
@@ -38,7 +47,7 @@ export class EventService {
     const { startDate, endDate, page, ...query } = p;
     let temp = [{}];
     let limit = 4;
-    if (startDate && endDate && endDate>=startDate) {
+    if (startDate && endDate && endDate >= startDate) {
       temp = [
         {
           startDate: { $gte: startDate, $lte: endDate },
@@ -76,5 +85,13 @@ export class EventService {
     return response;
   }
 
-  
+  async getMyEvents(userID: string, page: string) {
+    const limit = 2;
+    let skip = (Number(page) - 1) * limit;
+    let events = await this.event.find({ createdBy: { $in: [userID] } }).skip(skip).limit(limit).lean().exec();
+
+    let count = await this.event.countDocuments({ createdBy: { $in: [userID] } });
+    return { events, pages: Math.ceil(count / limit) };
+
+  }
 }

@@ -17,7 +17,7 @@ function Navbar() {
       dispatch(deleteUSerRole());
       toast.success("Logged out successfully!");
     }
-      navigate('/login')
+    navigate('/login')
   }
   return (
     <div className="navbar-div">
@@ -27,6 +27,10 @@ function Navbar() {
         </Link>
         {userRole && <Link className="nav-buttons" to="/favourites">
           Favourites
+        </Link>}
+
+        {userRole === "manager" && <Link className="nav-buttons" to="/myevents">
+          My Events
         </Link>}
       </div>
 

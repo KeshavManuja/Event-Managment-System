@@ -1,99 +1,115 @@
 .App {
   text-align: center;
-  
+
 }
-.main-box{
+
+.main-box {
   padding-top: 100px;
 }
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;
 }
-.main-box{
+
+.main-box {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
 }
-.login-div{
+
+.login-div {
   display: flex;
   align-items: center;
   justify-content: center;
   flex-direction: column;
   width: 30%;
 }
-.marginR{
+
+.marginR {
   margin-right: 10px;
 }
- .navbar-div{
-    padding: 7px;
-    display: flex;
-    flex-direction: row;
-    background-color:thistle;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    position: sticky;
-    top:0,
 
- }
- .filter-div{
+.navbar-div {
+  padding: 7px;
   display: flex;
-  justify-content:space-evenly;
+  flex-direction: row;
+  background-color: black;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  margin-bottom: 20px;
+  position: sticky;
+  top: 0,
+
+}
+
+.filter-div {
+  display: flex;
+  justify-content: space-evenly;
   align-items: center;
   margin-bottom: 20px;
- }
- .alert-box{
+}
+
+.alert-box {
   width: 100%;
   height: 100px;
   display: flex;
   justify-content: center;
   align-items: center;
- }
- .nav-buttons{
+}
+
+.nav-buttons {
   margin-right: 10px;
   text-decoration: none;
   font-size: 20px;
   color: dodgerblue;
- }
- .eventcard-div{
-    background-color:aliceblue;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    border-radius:30px
- }
- .tags-div{
+}
+
+.eventcard-div {
+  background-color: white;
+  box-shadow: 0px 0px 5px 1px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  padding-bottom: 15px;
+}
+
+.tags-div {
   width: fit-content;
   height: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: blanchedalmond;
-  border-radius: 15px;
-  color: tomato;
+  border-radius: 10px;
   margin-left: 10px;
-  padding: 2px;
- }
- .events-div{
+  padding: 5px 10px;
+  /* border: 1px solid dodgerblue; */
+  box-shadow: inset 0px 0px 3px 1px;
+}
+
+.events-div {
   display: grid;
-  grid-template-columns: repeat(2,28%);
-  grid-gap: 15px;
+  grid-template-columns: repeat(2, 35%);
+  grid-gap: 90px;
   justify-content: center;
   align-items: center;
- }
- 
- .pagination-div{
-    padding-top: 20px;
-    padding-bottom: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-  
- }
- .add-events-div{
+}
+
+.pagination-div {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+}
+
+.add-events-div {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -103,11 +119,12 @@
   width: fit-content;
   margin: auto;
   margin-top: 100px;
- }
- .title-div{
+}
+
+.title-div {
   display: flex;
   justify-content: space-between;
-  align-items:center;
-  
+  align-items: center;
 
- }
+
+}

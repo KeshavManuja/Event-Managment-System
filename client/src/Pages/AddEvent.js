@@ -15,10 +15,10 @@ function AddEvent() {
   const [endDate, setEndDate] = useState(new Date());
   const [title, setTitle] = useState("");
   const [tag, setTag] = useState("");
-  const [description,setDescription] = useState("")
+  const [description, setDescription] = useState("")
   const [address, setAddress] = useState("");
   const userID = useSelector((store) => store.userID)
-  const [cookie,setCookie,removeCookie] = useCookies(["token"])
+  const [cookie, setCookie, removeCookie] = useCookies(["token"])
   const navigate = useNavigate();
   function handleEventSubmit() {
     const payload = {
@@ -27,13 +27,13 @@ function AddEvent() {
       category,
       description,
       tags: tag,
-      virtual:isVirtual,
+      virtual: isVirtual,
       startDate,
       endDate,
       createdBy: userID
     };
-    dispatch(createEvent({payload,token:cookie.token}));
-    navigate('/')
+    dispatch(createEvent({ payload, token: cookie.token }));
+    // navigate('/')
   }
   return (
     <div className="add-events-div">
@@ -57,7 +57,7 @@ function AddEvent() {
         variant="standard"
         onChange={(e) => setTag(e.target.value)}
       />
-            <TextField
+      <TextField
         id="standard-basic"
         label="Enter Description"
         variant="standard"
@@ -69,18 +69,18 @@ function AddEvent() {
         variant="standard"
         onChange={(e) => setAddress(e.target.value)}
       />
-      <br/>
+      <br />
       <div>
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
-      <DesktopDatePicker
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <DesktopDatePicker
             label="Start-Date"
             inputFormat="dd/MM/yyyy"
             value={startDate}
             onChange={(nd) => setStartDate(nd)}
             renderInput={(params) => <TextField {...params} />}
           />
-          <br/>
-          <br/>
+          <br />
+          <br />
           <DesktopDatePicker
             label="End-Date"
             inputFormat="dd/MM/yyyy"
@@ -96,7 +96,7 @@ function AddEvent() {
           control={
             <Checkbox
               checked={isVirtual}
-              onClick={(e)=>setIsVirtual(!isVirtual)}
+              onClick={(e) => setIsVirtual(!isVirtual)}
             />
           }
           label="Isvirual"
