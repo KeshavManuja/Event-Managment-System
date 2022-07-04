@@ -71,7 +71,7 @@ export const EventCard = ({ item, page }) => {
       <p style={{ padding: "5px" }}><i>{item.description}</i></p>
       <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
         <span>Tags: </span>
-        {item.tags[0].split(" ").map((tag, index) => {
+        {item.tags.map((tag, index) => {
           return (
             <div key={index} className="tags-div">
               {tag}

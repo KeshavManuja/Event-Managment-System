@@ -1,6 +1,6 @@
-import { ADD_EVENT, ADD_FAVOURITES, GET_ALL_EVENTS, GET_FAVOURITES, GET_MY_EVENTS, REMOVE_FAVOURITE, SET_CATEGORIES, SET_EVENTS, SET_FAVOURITES, SET_TOTAL_COUNT, SET_USER_ID, SET_USER_ROLE } from "./Action";
+import { ADD_EVENT, ADD_FAVOURITES, GET_ALL_EVENTS, GET_FAVOURITES, GET_MY_EVENTS, REMOVE_FAVOURITE, SET_CATEGORIES, SET_EVENTS, SET_FAVOURITES, SET_TAGS, SET_TOTAL_COUNT, SET_USER_ID, SET_USER_ROLE } from "./Action";
 
-export const init = { userFav: [], userID: null, totalCount: 1, events: [], userRole: null, categories: [], myEvents: [] };
+export const init = { userFav: [], userID: null, totalCount: 1, events: [], userRole: null, categories: [], myEvents: [] , tags:[]};
 
 export const rootReducer = (state = init, { type, payload }) => {
   switch (type) {
@@ -32,7 +32,10 @@ export const rootReducer = (state = init, { type, payload }) => {
       return { ...state, userFav: payload }
 
     case GET_MY_EVENTS:
-      return { ...state, myEvents: payload }
+      return { ...state, myEvents: payload };
+
+    case SET_TAGS:
+      return { ...state , tags: payload}
 
     default:
       return state;

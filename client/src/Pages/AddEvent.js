@@ -1,7 +1,7 @@
-import { Button, Checkbox, FormControlLabel, TextField } from "@mui/material";
-import React, { useState } from "react";
+import { Button, Checkbox, FormControl, FormControlLabel, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createEvent } from "../redux/Action";
+import { createEvent, setTags } from "../redux/Action";
 import { useNavigate } from "react-router";
 import { DateTimePicker, DesktopDatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
@@ -14,7 +14,8 @@ function AddEvent() {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [title, setTitle] = useState("");
-  const [tag, setTag] = useState("");
+  const [tag, setTag] = useState([]);
+  const {tags} = useSelector((store) => store);
   const [description, setDescription] = useState("")
   const [address, setAddress] = useState("");
   const userID = useSelector((store) => store.userID)
@@ -32,9 +33,14 @@ function AddEvent() {
       endDate,
       createdBy: userID
     };
+    console.log(payload);
     dispatch(createEvent({ payload, token: cookie.token }));
     // navigate('/')
   }
+
+  useEffect(()=> {
+    dispatch(setTags());
+  },[])
   return (
     <div className="add-events-div">
       <i><h3>Add Event</h3></i>
@@ -51,12 +57,7 @@ function AddEvent() {
         variant="standard"
         onChange={(e) => setCategory(e.target.value)}
       />
-      <TextField
-        id="standard-basic"
-        label="Enter Tags"
-        variant="standard"
-        onChange={(e) => setTag(e.target.value)}
-      />
+      
       <TextField
         id="standard-basic"
         label="Enter Description"
@@ -70,6 +71,27 @@ function AddEvent() {
         onChange={(e) => setAddress(e.target.value)}
       />
       <br />
+
+      <br/>
+      <FormControl>
+          <InputLabel id="Categories">Tags</InputLabel>
+          <Select
+            multiple={true}
+            labelId="Tags"
+            id="demo-simple-select-standard"
+            value={tag}
+            onChange={(e) => setTag(e.target.value)}
+            style={{ width: "220px" }}
+          >
+            {console.log("Tags are",tags)}
+            {tags && tags.map((item, index) => {
+              console.log(item)
+              return <MenuItem key={index} value={item}>{item}</MenuItem>
+            })}
+          </Select>
+        </FormControl>
+
+        <br/>
       <div>
         <LocalizationProvider dateAdapter={AdapterDateFns}>
           <DesktopDatePicker
@@ -91,6 +113,7 @@ function AddEvent() {
         </LocalizationProvider>
       </div>
 
+      
       <div style={{ marginTop: "20px" }}>
         <FormControlLabel
           control={

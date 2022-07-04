@@ -80,6 +80,10 @@ export class EventService {
     return categories;
   }
 
+  setTags() : string[] {
+    const tags = ["Science","Education","Bussiness","Technology","Electronics"];
+    return tags
+  }
   async deleteEvents(id: string): Promise<Event> {
     let response = await this.event.findByIdAndDelete(id);
     return response;

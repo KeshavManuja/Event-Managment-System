@@ -51,6 +51,11 @@ export class EventsController {
     return this.eventService.setCategories()
   }
 
+  @Get('/tags')
+  setTags() {
+    return this.eventService.setTags();
+  }
+
   @Get('/myevents/:id/:page')
   getMyEvents(@Param('id') id, @Param('page') page) {
     return this.eventService.getMyEvents(id, page);

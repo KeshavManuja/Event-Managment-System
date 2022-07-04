@@ -3,7 +3,7 @@ import * as joi from 'joi';
 export const JoiEventSchema = joi.object({
   title: joi.string().min(3).max(30).required(),
   category: joi.string().min(3).required(),
-  tags: [joi.string().required()],
+  tags: joi.array().items(joi.string()),
   description: joi.string().min(5).required(),
   address: joi.string().required(),
   startDate: joi.date().required(),

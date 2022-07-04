@@ -16,7 +16,7 @@ export const REMOVE_FAVOURITE = "REMOVE_FAVOURITE";
 export const GET_ALL_EVENTS = "GET_ALL_EVENTS";
 export const FETCH_USER = "FETCH_USER";
 export const GET_MY_EVENTS = "GET_MY_EVENTS";
-
+export const SET_TAGS = "SET_TAGS";
 
 export const getEvents = (path = "") => (dispatch) => {
   axios
@@ -29,7 +29,16 @@ export const getEvents = (path = "") => (dispatch) => {
       console.log(err);
     });
 };
-
+export const setTags = () => (dispatch) => {
+  axios.get('http://localhost:3001/events/tags')
+    .then(({data})=> {
+      console.log(data)
+      dispatch({type: SET_TAGS, payload: data})
+    })
+    .catch((err)=> {
+      toast.error(err.message)
+    })
+}
 export const getFavourites = (userID, page = 1, token) => (dispatch) => {
   console.log(page)
   axios.get(`http://localhost:3001/user/favourites/${userID}/${page}`, {
