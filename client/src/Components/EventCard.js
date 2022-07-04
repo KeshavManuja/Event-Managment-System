@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Checkbox from "@material-ui/core/Checkbox";
 import Favorite from "@material-ui/icons/Favorite";
 import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
 import { useDispatch, useSelector } from "react-redux";
 import DeleteOutlineSharpIcon from "@mui/icons-material/DeleteOutlineSharp";
 import { red } from "@material-ui/core/colors";
-import { addFavourites, eventDelete, getEvents, removeFavourite } from "../redux/Action";
+import { addFavourites, eventDelete, removeFavourite } from "../redux/Action";
 import { toast } from "react-toastify";
 import { useCookies } from "react-cookie";
+
 
 export const EventCard = ({ item, page }) => {
   const [cookie, setCookie, removeCookie] = useCookies(["token", "userRole", "userID"])
@@ -18,9 +19,7 @@ export const EventCard = ({ item, page }) => {
   const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
   const handleFavourites = (favEvent) => {
-    const id = favEvent._id;
     const payload = { userID, favEvent };
-    console.log(payload, userFav.favourites);
     if (userFav && userFav.find((el) => el._id === favEvent._id)) {
       dispatch(removeFavourite(favEvent, userID, cookie.token));
 
@@ -30,8 +29,6 @@ export const EventCard = ({ item, page }) => {
   };
 
   const handleEventDelete = (event) => {
-    const id = event._id
-    const payload = { userID, event };
 
     if (userID === event.createdBy) {
       dispatch(eventDelete(event._id, page, cookie.token));

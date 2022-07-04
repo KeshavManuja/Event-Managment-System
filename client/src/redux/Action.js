@@ -1,5 +1,6 @@
 import axios from "axios";
 import { toast } from "react-toastify";
+import { ADD_FAVOURITES_URL, GET_FAVOURITES_URL, REMOVE_FAVOURITE_URL, SET_EVENTS_URL,  SET_EVENT_CATEGORY_URL, SET_EVENT_TAGS_URL, SET_MY_EVENTS_URL } from "../config/EndPoints";
 export const SET_EVENTS = "SET_EVENTS";
 export const SET_USER_ROLE = "SET_USER_ROLE";
 export const DELETE_USER_ROLE = "DELETE_USER_ROLE";
@@ -20,7 +21,7 @@ export const SET_TAGS = "SET_TAGS";
 
 export const getEvents = (path = "") => (dispatch) => {
   axios
-    .get(`http://localhost:3001/events${path}`)
+    .get(`${SET_EVENTS_URL}/${path}`)
     .then(({ data }) => {
       dispatch({ type: SET_EVENTS, payload: data.res });
       dispatch({ type: SET_TOTAL_COUNT, payload: data.pages });
@@ -30,7 +31,7 @@ export const getEvents = (path = "") => (dispatch) => {
     });
 };
 export const setTags = () => (dispatch) => {
-  axios.get('http://localhost:3001/events/tags')
+  axios.get(SET_EVENT_TAGS_URL)
     .then(({data})=> {
       console.log(data)
       dispatch({type: SET_TAGS, payload: data})
@@ -40,8 +41,8 @@ export const setTags = () => (dispatch) => {
     })
 }
 export const getFavourites = (userID, page = 1, token) => (dispatch) => {
-  console.log(page)
-  axios.get(`http://localhost:3001/user/favourites/${userID}/${page}`, {
+
+  axios.get(`${GET_FAVOURITES_URL}/${userID}/${page}`, {
     headers: { jwt: token }
   })
     .then(({ data }) => {
@@ -82,7 +83,7 @@ export const deleteUSerRole = () => ({
 export const createEvent = ({ payload, token }) => (dispatch) => {
 
   axios
-    .post("http://localhost:3001/events", payload, {
+    .post(SET_EVENTS_URL, payload, {
       headers: { jwt: token },
     })
     .then(({ data }) => {
@@ -97,7 +98,7 @@ export const createEvent = ({ payload, token }) => (dispatch) => {
 
 export const setCategories = () => (dispatch) => {
   axios
-    .get("http://localhost:3001/events/category", {
+    .get(SET_EVENT_CATEGORY_URL, {
     })
     .then(({ data }) => {
       dispatch({ type: SET_CATEGORIES, payload: data });
@@ -110,7 +111,7 @@ export const setCategories = () => (dispatch) => {
 export const addFavourites = (favEvent, userID, token) => (dispatch) => {
   const payload = { favEvent, userID }
   axios
-    .post("http://localhost:3001/user/favourites/add", payload, {
+    .post(ADD_FAVOURITES_URL, payload, {
       headers: { jwt: token },
     })
     .then(({ data }) => {
@@ -124,7 +125,7 @@ export const addFavourites = (favEvent, userID, token) => (dispatch) => {
 
 export const eventDelete = (eventID, page, token) => (dispatch) => {
   axios
-    .delete(`http://localhost:3001/events/${eventID}`, {
+    .delete(`${SET_EVENTS_URL}/${eventID}`, {
       headers: { jwt: token },
     })
     .then(() => {
@@ -137,7 +138,7 @@ export const eventDelete = (eventID, page, token) => (dispatch) => {
 export const removeFavourite = (favEvent, userID, token) => (dispatch) => {
   const payload = { userID, favEvent };
   axios
-    .post("http://localhost:3001/user/favourites/remove", payload, {
+    .post(REMOVE_FAVOURITE_URL, payload, {
       headers: { jwt: token },
     })
     .then(({ data }) => {
@@ -152,7 +153,7 @@ export const removeFavourite = (favEvent, userID, token) => (dispatch) => {
 
 export const getMyEvents = (userID, page = 1, token) => (dispatch) => {
   axios
-    .get(`http://localhost:3001/events/myevents/${userID}/${page}`, {
+    .get(`${SET_MY_EVENTS_URL}/${userID}/${page}`, {
       headers: { jwt: token }
     })
     .then(({ data }) => {

@@ -12,7 +12,7 @@ import TextField from "@mui/material/TextField";
 import "react-datepicker/dist/react-datepicker.css";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { eventDelete, getAllEvents, getEvents, setCategories, setFavourites } from "../redux/Action";
+import { eventDelete, getEvents, setCategories, setFavourites } from "../redux/Action";
 import { useNavigate } from "react-router";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
