@@ -20,6 +20,7 @@ import { DesktopDatePicker } from "@mui/x-date-pickers";
 import { EventCard } from "../Components/EventCard";
 import Navbar from "../Components/Navbar";
 import { queryPath } from "../utils/queryStringGenerator";
+import { toast } from "react-toastify";
 
 
 export const Home = () => {
@@ -43,30 +44,36 @@ export const Home = () => {
   }, [page]);
 
   function handleFilters() {
-    const payload = {
-      title,
-      address,
-      category,
-      virtual: isVirtual,
-      startDate: startDate,
-      endDate: endDate,
-      page
-    };
+    if(title || address || category || startDate || endDate) {
 
-    const path = queryPath(payload);
-    dispatch(getEvents(`?${path}`));
+      const payload = {
+        title,
+        address,
+        category,
+        virtual: isVirtual,
+        startDate: startDate,
+        endDate: endDate,
+        page
+      };
+    
+      const path = queryPath(payload);
+      dispatch(getEvents(`?${path}`));
+    }
+    else toast.error("Please add some value in filter feilds")
   }
 
   function clearFeilds() {
-    setIsVirtual(false);
-    setTitle("");
-    setAddress("");
-    setCategory("");
-    setStartDate();
-    setEndDate(null);
-    setStartDate(null);
-    setEndDate(null);
-    setPage(1);
+    if(title || address || category || isVirtual || startDate || endDate) {
+      setIsVirtual(false);
+      setTitle("");
+      setAddress("");
+      setCategory("");
+      setStartDate();
+      setEndDate(null);
+      setStartDate(null);
+      setEndDate(null);
+      setPage(1);
+    }
   }
   return (
     <>

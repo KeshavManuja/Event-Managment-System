@@ -71,6 +71,12 @@ export class EventService {
       .limit(limit)
       .lean()
       .exec();
+    if(!res) {
+      throw new HttpException(
+        "Invalid request",
+        HttpStatus.BAD_REQUEST,
+      );
+    }
     let count = await this.event.countDocuments({ $or: temp, ...query });
     return { res, pages: Math.ceil(count / limit) };
   }
@@ -85,8 +91,25 @@ export class EventService {
     return tags
   }
   async deleteEvents(id: string): Promise<Event> {
-    let response = await this.event.findByIdAndDelete(id);
-    return response;
+    let res = await this.event.findById(id);
+    if(!res) {
+      throw new HttpException(
+        "Event with given id is not found",
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+     const current_date = new Date();
+    if(current_date > res.startDate) {
+      throw new HttpException(
+        "Can not delete past events",
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    else {
+
+      let response = await this.event.findByIdAndDelete(id);
+      return response;
+    }
   }
 
   async getMyEvents(userID: string, page: string) {

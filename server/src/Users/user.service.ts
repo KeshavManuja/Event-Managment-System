@@ -15,6 +15,12 @@ export class UserService {
   }
   async getUser(id: string): Promise<User> {
     const user = await this.User.findOne({ _id: id });
+    if(!user) {
+      throw new HttpException(
+        'User not found',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
     return user;
   }
 
@@ -34,7 +40,7 @@ export class UserService {
         HttpStatus.BAD_REQUEST,
       );
     }
-
+    
     const token = JWT.sign({ id: user.id }, process.env.JSONSecret);
     return { message: 'Login successful', token, role: user.role, userID: user._id, userFav: user.favourites };
   }
@@ -44,6 +50,14 @@ export class UserService {
   async addFavourites(body: any) {
 
     const user = await this.User.findById(body.userID);
+
+    if (!user) {
+      throw new HttpException(
+        'User not found!!',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
     user.favourites.push(body.favEvent);
     await user.save();
     return body.favEvent;
@@ -51,6 +65,13 @@ export class UserService {
 
   async removeFavourites(body: any) {
     let user = await this.User.findById(body.userID);
+    if (!user) {
+      throw new HttpException(
+        'User not found!!',
+        HttpStatus.BAD_REQUEST,
+      );
+    };
+
     user.favourites = user.favourites.filter((favourite) => favourite._id !== body.favEvent._id);
     return user.save();
   }
@@ -58,6 +79,12 @@ export class UserService {
   async getFavourites(userID: string, page: string) {
     const limit = 2;
     let user = await this.User.findById(userID).lean().exec();
+    if (!user) {
+      throw new HttpException(
+        'User not found!!',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
     const favEvents = user.favourites.slice(Number(page) - 1, limit);
     return { favEvents, pages: Math.ceil(user.favourites.length / limit) };
 

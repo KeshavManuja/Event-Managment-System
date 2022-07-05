@@ -2,6 +2,8 @@ import React from "react";
 import Checkbox from "@material-ui/core/Checkbox";
 import Favorite from "@material-ui/icons/Favorite";
 import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
+import { confirmAlert } from 'react-confirm-alert'; 
+import 'react-confirm-alert/src/react-confirm-alert.css';
 import { useDispatch, useSelector } from "react-redux";
 import DeleteOutlineSharpIcon from "@mui/icons-material/DeleteOutlineSharp";
 import { red } from "@material-ui/core/colors";
@@ -28,7 +30,29 @@ export const EventCard = ({ item, page }) => {
 
   };
 
+  const submit = (item) => {
+    confirmAlert({
+      title: 'Confirm to delete',
+      message: 'Are you sure, you want to delete this event?',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: () => handleEventDelete(item)
+        },
+        {
+          label: 'No',
+        }
+      ]
+    });
+  }
+
   const handleEventDelete = (event) => {
+    let current_date = new Date();
+    let toISO = current_date.toISOString();
+
+    if(toISO >event.startDate){
+      return toast.error("Event is in Past, not allowed to delete")
+    }
 
     if (userID === event.createdBy) {
       dispatch(eventDelete(event._id, page, cookie.token));
@@ -56,7 +80,7 @@ export const EventCard = ({ item, page }) => {
         {userRole === "manager" && (
           <DeleteOutlineSharpIcon
             sx={{ color: red[500] }}
-            onClick={() => handleEventDelete(item)}
+            onClick={() => submit(item)}
           />
         )}
       </div>

@@ -56,6 +56,8 @@ export class EventsController {
     return this.eventService.setTags();
   }
 
+  @RoleGuard(userRoles.Manager)
+  @UseGuards(AuthGuard)
   @Get('/myevents/:id/:page')
   getMyEvents(@Param('id') id, @Param('page') page) {
     return this.eventService.getMyEvents(id, page);

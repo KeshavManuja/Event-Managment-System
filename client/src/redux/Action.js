@@ -142,7 +142,6 @@ export const removeFavourite = (favEvent, userID, token) => (dispatch) => {
       headers: { jwt: token },
     })
     .then(({ data }) => {
-      console.log('in remove: ', data);
       dispatch({ type: SET_FAVOURITES, payload: data.favourites });
       toast.success("Removed from favourites successfully!");
     })

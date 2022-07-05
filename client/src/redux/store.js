@@ -9,7 +9,5 @@ const persistedState = localStorage.getItem("reduxState")
 export const store = createStore(rootReducer, persistedState, applyMiddleware(thunk));
 
 store.subscribe(() => {
-    console.log("Called subscribe");
-    console.log("current state is : ", store.getState());
     localStorage.setItem("reduxState", JSON.stringify(store.getState()));
 });

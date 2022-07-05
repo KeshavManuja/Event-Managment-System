@@ -41,11 +41,15 @@ export class UserController {
     return this.userService.login(body);
   }
 
+  @RoleGuard(userRoles.Manager, userRoles.Regular)
+  @UseGuards(AuthGuard)
   @Post('favourites/add')
   addFavourites(@Body() body: modifyFavourites): any {
     return this.userService.addFavourites(body);
   }
 
+  @RoleGuard(userRoles.Manager, userRoles.Regular)
+  @UseGuards(AuthGuard)
   @Post('favourites/remove')
   removeFavourites(@Body() body: modifyFavourites): any {
     return this.userService.removeFavourites(body);
@@ -59,6 +63,8 @@ export class UserController {
     return this.userService.getUserfromToken(body)
   }
 
+  @RoleGuard(userRoles.Manager, userRoles.Regular)
+  @UseGuards(AuthGuard)
   @Get('favourites/:id/:page')
   getFavourites(@Param('id') id: string, @Param('page') page: string) {
     return this.userService.getFavourites(id, page)
