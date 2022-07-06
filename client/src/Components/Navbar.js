@@ -16,6 +16,7 @@ function Navbar() {
       removeCookie("userRole");
       dispatch(deleteUSerRole());
       toast.success("Logged out successfully!");
+      localStorage.removeItem("reduxState")
     }
     navigate('/login')
   }
