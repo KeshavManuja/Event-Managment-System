@@ -27,13 +27,12 @@ export const getEvents = (path = "") => (dispatch) => {
       dispatch({ type: SET_TOTAL_COUNT, payload: data.pages });
     })
     .catch((err) => {
-      console.log(err);
+      toast.error(err.message)
     });
 };
 export const setTags = () => (dispatch) => {
   axios.get(SET_EVENT_TAGS_URL)
     .then(({data})=> {
-      console.log(data)
       dispatch({type: SET_TAGS, payload: data})
     })
     .catch((err)=> {
@@ -46,7 +45,6 @@ export const getFavourites = (userID, page = 1, token) => (dispatch) => {
     headers: { jwt: token }
   })
     .then(({ data }) => {
-      console.log(data)
       dispatch({ type: SET_FAVOURITES, payload: data.favEvents })
       dispatch({ type: SET_TOTAL_COUNT, payload: data.pages });
 
@@ -91,7 +89,6 @@ export const createEvent = ({ payload, token }) => (dispatch) => {
       toast.success("Event created successfully");
     })
     .catch((err) => {
-      console.log(err);
       toast.error(err.response.data.message);
     });
 };
@@ -104,7 +101,7 @@ export const setCategories = () => (dispatch) => {
       dispatch({ type: SET_CATEGORIES, payload: data });
     })
     .catch((err) => {
-      console.log(err.message);
+      toast.error(err.message);
     });
 };
 
@@ -156,7 +153,6 @@ export const getMyEvents = (userID, page = 1, token) => (dispatch) => {
       headers: { jwt: token }
     })
     .then(({ data }) => {
-      console.log(data)
       dispatch({ type: GET_MY_EVENTS, payload: data.events });
       dispatch({ type: SET_TOTAL_COUNT, payload: data.pages });
 

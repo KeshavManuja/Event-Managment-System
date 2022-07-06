@@ -19,7 +19,7 @@ export const Favourites = () => {
   useEffect(() => {
     userID && dispatch(getFavourites(userID, page, cookies?.token));
   }, [page])
-  console.log(userFav)
+  
   return (
     <div>
       <Navbar />

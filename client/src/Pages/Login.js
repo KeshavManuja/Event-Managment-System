@@ -17,7 +17,6 @@ function Login() {
     axios
       .post("http://localhost:3001/user/login", { email, password })
       .then(({ data }) => {
-        console.log('this is user data; ', data);
         setCookie("token", data.token);
         setCookie("userRole", data.role);
         dispatch(setUserID(data.userID));

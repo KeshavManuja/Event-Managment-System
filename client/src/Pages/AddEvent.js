@@ -34,7 +34,6 @@ function AddEvent() {
       endDate,
       createdBy: userID
     };
-    console.log(payload);
     dispatch(createEvent({ payload, token: cookie.token }));
   }
 
@@ -86,7 +85,6 @@ function AddEvent() {
             style={{ width: "220px" }}
           >
             {tags && tags.map((item, index) => {
-              console.log(item)
               return <MenuItem key={index} value={item}>{item}</MenuItem>
             })}
           </Select>
