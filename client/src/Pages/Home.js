@@ -73,6 +73,7 @@ export const Home = () => {
       setStartDate(null);
       setEndDate(null);
       setPage(1);
+      dispatch(getEvents('?page=1'));
     }
   }
   return (
